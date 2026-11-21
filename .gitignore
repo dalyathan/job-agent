@@ -1,0 +1,11 @@
+# Personal data never goes in this public repo.
+data/
+*.npz
+.env
+profile.json
+bank.jsonl
+
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/

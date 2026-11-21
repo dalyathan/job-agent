@@ -1,0 +1,29 @@
+{
+  "verified": false,
+  "needs_review": ["Remove this list and set verified to true once every fact below is checked."],
+  "contact": {
+    "name": "Alex Rivera",
+    "location": "Tulsa, OK",
+    "phone": "555-010-0199",
+    "email": "alex@example.edu",
+    "linkedin": "linkedin.com/in/example",
+    "github": "github.com/example"
+  },
+  "eligibility": "Authorized to work in the US without sponsorship · Available Summer 2027",
+  "education": [
+    {"school": "Example University", "degree": "Master of Science in Computer Science", "dates": "Expected Dec 2027", "gpa": ""}
+  ],
+  "experience": [
+    {"employer": "Example Corp", "title": "Software Engineer", "location": "Remote", "dates": "Jan 2023 – Aug 2025", "type": "Full-Time"}
+  ],
+  "projects": [
+    {"name": "Example Project", "dates": "2026", "url": "https://github.com/example/project"}
+  ],
+  "certifications": [],
+  "skills": {
+    "Languages": ["Python", "SQL"],
+    "Tools": ["Docker", "GitHub Actions"]
+  },
+  "honors": [],
+  "constraints": {"needs_sponsorship": false, "graduation": "2027-12", "open_to_relocation": true}
+}
