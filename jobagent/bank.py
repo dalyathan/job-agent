@@ -70,7 +70,7 @@ def save_bank(path: Path, items: Iterable[BankItem]) -> None:
 _MD = re.compile(r"\*\*|\*|__|\\(?=[#~\-*])")
 _LINK = re.compile(r"\[([^\]]+)\]\([^)]+\)")
 _HEADING = re.compile(r"^[A-Z&/ ]{4,}$")
-_SECTION_WORDS = re.compile(r"EDUCATION|EXPERIENCE|PROJECT|SKILL|SUMMARY|CERTIFICATION|AWARD|HONOR|LEADERSHIP|PUBLICATION|ACTIVITIES|EMPLOYMENT|WORK", re.I)
+_SECTION_WORDS = re.compile(r"EDUCATION|EXPERIENCE|PROJECT|SKILL|SUMMARY|RESEARCH|OPEN SOURCE|CERTIFICATION|AWARD|HONOR|LEADERSHIP|PUBLICATION|ACTIVITIES|EMPLOYMENT|WORK", re.I)
 _BULLET =re.compile(r"^\s*(?:[-*•▪◦]|\d+\.)\s+(.*)")
 _PROJECT = re.compile(r"^([A-Za-z0-9][^:]{2,80}):\s+(.{30,})$")
 _SALUTATION = re.compile(r"^(dear|to whom|hello|hi)\b", re.I)
@@ -100,7 +100,7 @@ def parse_resume(text: str, source: str) -> list[BankItem]:
             items.append(BankItem(make_id("resume_bullet", m.group(1)), "resume_bullet", m.group(1), source, context))
             continue
         p = _PROJECT.match(line)
-        if p and (not section or "project" in section.lower()):
+        if p and (not section or any(w in section.lower() for w in ("project", "research", "open source"))):
             body = f"{p.group(1)}: {p.group(2)}"
             items.append(BankItem(make_id("project", body), "project", body, source, p.group(1)))
             continue

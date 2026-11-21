@@ -87,7 +87,7 @@ def _resume_lines(resume: dict[str, Any]):
     for job in resume.get("experience", []):
         for b in job.get("bullets", []):
             yield f"{job.get('employer', '?')} bullet", b.get("text", ""), b.get("sources", [])
-    for p in resume.get("projects", []):
+    for p in resume.get("research", []) + resume.get("projects", []):
         yield f"project {p.get('name', '?')}", f"{p.get('name', '')}: {p.get('text', '')}", p.get("sources", [])
 
 
