@@ -22,10 +22,9 @@ working on this application.
    learn. Then list it under `gaps`.
 4. Skills listed must be skills in the profile. Order and select them to match the job.
 5. Employers, titles, schools and dates come from the profile exactly.
-6. One page of resume. Sections always render in this order: Experience, Education,
-   Research and Open Source, Projects, Skills. Within each, lead with what this job cares
-   about most. Put research and open-source contributions under `research`, other projects
-   under `projects` (either may be empty). Give every
+6. One page of resume. The layout is fixed: a profile summary and the eligibility line,
+   then Education, Experience, Projects, Skills. Within each, lead with what this job cares
+   about most. Research and open-source contributions go under `projects`. Give every
    job you list at least one concrete bullet; drop a job's vague bullets rather than
    keep filler. Name the language or stack where the material says it.
 7. Cover letter: under 350 words, in the candidate's own voice (match the voice examples:
@@ -43,7 +42,6 @@ Write `draft.json`, exactly this shape:
     "education": [{"school": "...", "degree": "...", "dates": "..."}],
     "experience": [{"employer": "...", "title": "...", "type": "Part-Time", "location": "...", "dates": "...",
                     "bullets": [{"text": "...", "sources": ["b-..."]}]}],
-    "research": [{"name": "...", "text": "...", "sources": ["p-..."]}],
     "projects": [{"name": "...", "text": "...", "sources": ["p-..."]}],
     "skills": {"Languages": ["Python"], "AI & ML": ["..."]}
   },

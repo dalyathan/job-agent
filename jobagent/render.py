@@ -12,13 +12,14 @@ from docx.oxml.ns import qn
 from docx.shared import Inches, Pt
 
 
-# Experience always comes first (owner's rule); the rest follow in this order.
-SECTIONS = ("experience", "education", "research", "projects", "skills")
-SECTION_TITLES = {"experience": "EXPERIENCE", "education": "EDUCATION", "research": "Research and Open Source",
-                  "projects": "PROJECTS", "skills": "SKILLS"}
+# The owner's layout: profile (summary + eligibility), then these sections in this order.
+SECTIONS = ("education", "experience", "projects", "skills")
+SECTION_TITLES = {"education": "EDUCATION", "experience": "EXPERIENCE", "projects": "PROJECTS", "skills": "SKILLS"}
 
 
 def section_order(resume: dict[str, Any]) -> list[str]:
+    if resume.get("research"):  # older drafts kept research separately; it belongs under Projects
+        resume["projects"] = list(resume.pop("research")) + list(resume.get("projects", []))
     return [x for x in SECTIONS if resume.get(x)]
 
 
@@ -48,7 +49,7 @@ def resume_text(resume: dict[str, Any], contact: dict[str, str]) -> str:
             for j in resume["experience"]:
                 head, title = _job_head(j)
                 out += [head, title] + [f"- {b['text']}" for b in j.get("bullets", [])]
-        elif sec in ("projects", "research"):
+        elif sec == "projects":
             out += [f"{p['name']}: {p['text']}" for p in resume[sec]]
         elif sec == "skills":
             out += [f"{g}: {', '.join(s)}" for g, s in resume["skills"].items()]
@@ -110,20 +111,19 @@ def _base(doc: Document) -> None:
 
 def resume_docx(resume: dict[str, Any], contact: dict[str, str], path: Path) -> Path:
     """Single column with real text (what applicant tracking systems parse best), laid out like the
-    owner's own resume: centered header and summary, ruled section headings, experience first."""
+    owner's own resume: centered header, profile summary, ruled section headings, then
+    Education, Experience, Projects, Skills."""
     doc = Document()
     _base(doc)
-    r = _para(doc, WD_ALIGN_PARAGRAPH.CENTER).add_run(contact.get("name", "").upper())
-    r.bold = True
-    r.font.size = Pt(12)
+    _para(doc, WD_ALIGN_PARAGRAPH.CENTER).add_run(contact.get("name", "").upper()).font.size = Pt(12)
     labels = {"linkedin": "LinkedIn: ", "github": "GitHub: ", "upwork": "Upwork: "}
     info = " · ".join(labels.get(k, "") + v for k, v in contact.items() if k != "name" and v)
     if info:
         _para(doc, WD_ALIGN_PARAGRAPH.CENTER).add_run(info)
     if resume.get("summary"):
-        _para(doc, WD_ALIGN_PARAGRAPH.CENTER).add_run(resume["summary"])
+        _para(doc, WD_ALIGN_PARAGRAPH.JUSTIFY).add_run(resume["summary"])
     if resume.get("eligibility"):
-        _para(doc, WD_ALIGN_PARAGRAPH.CENTER).add_run(resume["eligibility"]).italic = True
+        _para(doc, WD_ALIGN_PARAGRAPH.CENTER).add_run(resume["eligibility"])
     for sec in section_order(resume):
         _rule_heading(doc, SECTION_TITLES[sec])
         _DOCX_SECTION[sec](doc, resume)
@@ -169,8 +169,7 @@ def _docx_skills(doc, resume):
         p.add_run(", ".join(s))
 
 
-_DOCX_SECTION = {"education": _docx_education, "experience": _docx_experience, "research": _docx_named("research"),
-                 "projects": _docx_named("projects"), "skills": _docx_skills}
+_DOCX_SECTION = {"education": _docx_education, "experience": _docx_experience, "projects": _docx_named("projects"), "skills": _docx_skills}
 
 
 def letter_docx(letter: dict[str, Any], contact: dict[str, str], path: Path) -> Path:
